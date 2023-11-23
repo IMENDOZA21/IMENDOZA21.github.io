@@ -3,16 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Visor de PDF</title>
+    <!-- Agregar los estilos CSS de Viewer.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/viewerjs/dist/viewer.min.css">
 </head>
 <body>
-<iframe
-        scrolling="auto"
-        width="100%"
-        height="600px"
-        src="https://pruebasfenosa2310.acepta.com/ca4webv3/PdfViewMedia?url=http%3A%2F%2Fpruebasfenosa2310.acepta.com%2Fdepot%2FAC6AA292C0A803FAEDE2580CFBBAD10E77B76EB4%3Fk%3D9a9513fe5271c32e9c21d156eb9f1bea%26sesion%3D007c06abc6ac9250c5d8cfa43caa86012a825271609"
-        type="application/pdf"
-        title="PDF Viewer">
-</iframe>
+<!-- Contenedor para mostrar el PDF -->
+<div id="pdfViewer"></div>
+
+<!-- Agregar la librería Viewer.js y sus dependencias -->
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/viewerjs/dist/viewer.min.js"></script>
+
+<script>
+    // Función para inicializar Viewer.js con el PDF
+    $(document).ready(function() {
+        var url = "https://pruebasfenosa2310.acepta.com/ca4webv3/PdfViewMedia?url=http%3A%2F%2Fpruebasfenosa2310.acepta.com%2Fdepot%2FAC6AA292C0A803FAEDE2580CFBBAD10E77B76EB4%3Fk%3D9a9513fe5271c32e9c21d156eb9f1bea%26sesion%3D007c06abc6ac9250c5d8cfa43caa86012a825271609"; // Reemplaza con la URL del PDF
+        PDFJS.getDocument(url).promise.then(function(pdf) {
+            var pdfViewer = new Viewer(document.getElementById('pdfViewer'), {
+                inline: true,
+                viewed() {
+                    pdfViewer.view(index);
+                },
+            });
+
+            for (var i = 1; i <= pdf.numPages; i++) {
+                pdf.getPage(i).then(function(page) {
+                    var canvas = document.createElement("canvas");
+                    var context = canvas.getContext('2d');
+                    var viewport = page.getViewport({scale: 1.5});
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext).promise.then(function() {
+                        pdfViewer.add(canvas);
+                    });
+                });
+            }
+        });
+    });
+</script>
 </body>
 </html>
+
 
