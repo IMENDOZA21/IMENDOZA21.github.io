@@ -3,58 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Visor de PDF</title>
-    <!-- Estilos opcionales para la visualización -->
-    <style>
-        #pdfViewer {
-            width: 100%;
-            height: 500px; /* Establece la altura deseada */
-        }
-    </style>
 </head>
 <body>
-<!-- Contenedor para mostrar el PDF -->
-<div id="pdfViewer"></div>
-
-<!-- Script de PDF.js desde unpkg -->
-<script src="https://cdnjs.com/libraries/pdf.js"></script>
-
-<script>
-    // Función para cargar y mostrar el PDF
-    document.addEventListener('DOMContentLoaded', function() {
-        var pdfUrl = 'https://pruebasfenosa2310.acepta.com/ca4webv3/PdfViewMedia?url=http%3A%2F%2Fpruebasfenosa2310.acepta.com%2Fdepot%2FAC6AA292C0A803FAEDE2580CFBBAD10E77B76EB4%3Fk%3D9a9513fe5271c32e9c21d156eb9f1bea%26sesion%3D007c06abc6ac9250c5d8cfa43caa86012a825271609'; // Reemplaza con la URL del PDF
-
-        // Cargar el documento PDF
-        const loadingTask = pdfjsLib.getDocument(pdfUrl);
-        loadingTask.promise.then(function(pdf) {
-            // Establecer el número de página que quieres mostrar (página 1 en este caso)
-            var pageNumber = 1;
-
-            // Obtener la página
-            pdf.getPage(pageNumber).then(function(page) {
-                var scale = 1.5; // Establecer el zoom deseado
-                var viewport = page.getViewport({ scale: scale });
-
-                // Crear un elemento canvas para mostrar la página PDF
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                // Renderizar la página en el canvas
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                page.render(renderContext).promise.then(function() {
-                    document.getElementById('pdfViewer').appendChild(canvas);
-                });
-            });
-        });
-    });
-</script>
+<iframe
+        scrolling="auto"
+        width="100%"
+        height="600px"
+        src="https://www.turnerlibros.com/wp-content/uploads/2021/02/ejemplo.pdf"
+        type="application/pdf"
+        title="PDF Viewer">
+</iframe>
 </body>
 </html>
-
-
-
 
