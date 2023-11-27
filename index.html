@@ -16,15 +16,10 @@
             flex-direction: column;
             align-items: center;
         }
-
         #navigation_controls {
             display: flex;
             justify-content: center;
-            margin-top: 10px; /* Ajusta el margen según sea necesario */
-        }
-
-        #navigation_controls button {
-            /* Estilos para los botones, si los necesitas */
+            margin-top: 10px;
         }
     </style>
     <title>Visor de PDF</title>
@@ -79,7 +74,7 @@
     document.getElementById('go_previous')
         .addEventListener('click', (e) => {
             if(myState.pdf == null
-                || myState.currentPage == 1) return;
+                || myState.currentPage === 1) return;
             myState.currentPage -= 1;
             document.getElementById("current_page")
                 .value = myState.currentPage;
@@ -133,9 +128,13 @@
 
             if (percentage > 0.95 && myState.currentPage < myState.pdf.numPages) {
                 myState.currentPage++;
+                document.getElementById("current_page")
+                    .value = myState.currentPage;
                 render();
             } else if (percentage < 0.05 && myState.currentPage > 1) {
                 myState.currentPage--;
+                document.getElementById("current_page")
+                    .value = myState.currentPage;
                 render();
             }
         }, 100);
