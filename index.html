@@ -5,7 +5,7 @@
     <style>
         #canvas_container {
             width: 90%;
-            height: 600px;
+            height: 650px;
             overflow: auto;
             background: #333;
             text-align: center;
@@ -60,6 +60,8 @@
                 canvasContext: ctx,
                 viewport: viewport
             });
+
+            adjustContainerHeight(viewport.height);
         });
     }
 
@@ -123,6 +125,29 @@
             myState.zoom -= 0.5;
             render();
         });
+
+    var scrollTimeout;
+    document.getElementById('canvas_container').addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+            var container = document.getElementById('canvas_container');
+            var maxScrollTop = container.scrollHeight - container.clientHeight;
+            var percentage = container.scrollTop / maxScrollTop;
+
+            if (percentage > 0.95 && myState.currentPage < myState.pdf.numPages) {
+                myState.currentPage++;
+                render();
+            } else if (percentage < 0.05 && myState.currentPage > 1) {
+                myState.currentPage--;
+                render();
+            }
+        }, 100);
+    });
+
+    function adjustContainerHeight(pageHeight) {
+        var canvasContainer = document.getElementById('canvas_container');
+        canvasContainer.style.height = pageHeight + 'px';
+    }
 </script>
 </html>
 
